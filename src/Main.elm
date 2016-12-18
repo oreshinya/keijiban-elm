@@ -15,7 +15,7 @@ view : Model -> Html Msg
 view model =
   case (first model.history) of
     Just IndexTopic -> TopicList.view model
-    Just (ShowTopic id) -> TopicDetail.view
+    Just (ShowTopic id) -> TopicDetail.view id model
     Nothing -> NotFound.view
 
 init : Navigation.Location -> (Model, Cmd Msg)

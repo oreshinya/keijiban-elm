@@ -1,6 +1,7 @@
 module Component.TopicList exposing (view)
 
-import Html exposing (Html, div, h1, ul, li, span, text)
+import Html exposing (Html, div, h1, ul, li, a, span, text)
+import Html.Attributes exposing (href)
 import Msg exposing (..)
 import Model exposing (..)
 
@@ -12,7 +13,7 @@ view model = div []
   ]
 
 topicView : Topic -> Html Msg
-topicView t = li [] [ text t.name ]
+topicView t = li [] [ a [ href <| String.concat ["#topics/", toString t.id] ] [ text t.name ] ]
 
 errorView : Maybe String -> Html Msg
 errorView a =
