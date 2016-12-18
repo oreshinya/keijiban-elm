@@ -47,6 +47,18 @@ update msg model =
           ({ model | postTopicError = Just body }, Cmd.none)
         _ ->
           (model, Cmd.none)
+    CommentBodyChange body ->
+      ({ model | commentBody = body }, Cmd.none)
+    PostComment topicId ->
+      ({ model | postCommentError = Nothing }, postComment topicId model.commentBody)
+    PostCommentResult (Ok comment) ->
+      ({ model | comments = model.comments ++ [ comment ], commentBody = "" }, Cmd.none)
+    PostCommentResult (Err e) ->
+      case e of
+        Http.BadStatus { body } ->
+          ({ model | postCommentError = Just body }, Cmd.none)
+        _ ->
+          (model, Cmd.none)
 
 urlChangeCmd : Maybe Route -> Cmd Msg
 urlChangeCmd route =

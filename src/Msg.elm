@@ -10,3 +10,6 @@ type Msg = UrlChange Location
          | TopicNameChange String
          | PostTopic
          | PostTopicResult (Result Http.Error Topic)
+         | CommentBodyChange String
+         | PostComment Int
+         | PostCommentResult (Result Http.Error Comment)

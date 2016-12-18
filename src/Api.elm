@@ -60,3 +60,20 @@ getComments topicId =
     Http.send CommentsFromRemote
       <| Http.get url
       <| D.list decodeComment
+
+postComment : Int -> String -> Cmd Msg
+postComment topicId content =
+  let
+    body = Http.jsonBody <| E.object
+      [ ("topicId", E.int topicId)
+      , ("body", E.string content)
+      ]
+
+    url = String.concat
+      [ endPoint
+      , "/topics/"
+      , toString topicId
+      , "/comments"
+      ]
+  in
+     Http.send PostCommentResult <| corsPost url body decodeComment
