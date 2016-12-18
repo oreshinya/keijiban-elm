@@ -11,6 +11,8 @@ type alias Model =
   , getTopicsError : Maybe String
   , comments : List Comment
   , getCommentsError : Maybe String
+  , topicName : String
+  , postTopicError : Maybe String
   }
 
 initialModel : Navigation.Location -> Model
@@ -20,6 +22,8 @@ initialModel location =
   , getTopicsError = Nothing
   , comments = []
   , getCommentsError = Nothing
+  , topicName = ""
+  , postTopicError = Nothing
   }
 
 first : List (Maybe Route) -> Maybe Route

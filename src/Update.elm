@@ -1,5 +1,7 @@
 module Update exposing (..)
 
+import Http
+
 import Model exposing (..)
 import Route exposing (..)
 import Msg exposing (..)
@@ -31,6 +33,20 @@ update msg model =
       ({ model | getCommentsError = Just "Failed to get comments."}
       , Cmd.none
       )
+    TopicNameChange name ->
+      ({ model | topicName = name }, Cmd.none)
+    PostTopic ->
+      ({ model | postTopicError = Nothing }, postTopic model.topicName)
+    PostTopicResult (Ok topic) ->
+      ({ model | topics = topic :: model.topics, topicName = "" }
+      , Cmd.none
+      )
+    PostTopicResult (Err e) ->
+      case e of
+        Http.BadStatus { body } ->
+          ({ model | postTopicError = Just body }, Cmd.none)
+        _ ->
+          (model, Cmd.none)
 
 urlChangeCmd : Maybe Route -> Cmd Msg
 urlChangeCmd route =
