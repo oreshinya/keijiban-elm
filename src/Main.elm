@@ -1,42 +1,25 @@
 import Html exposing (Html)
 import Navigation
 
+import Model exposing (..)
+import Update exposing (..)
 import Route exposing (..)
 import Msg exposing (..)
+import Api exposing (..)
 import Component.NotFound as NotFound
 import Component.TopicList as TopicList
 import Component.TopicDetail as TopicDetail
-
--- Model
-type alias Model = { history : List (Maybe Route) }
-
-initialModel : Navigation.Location -> Model
-initialModel location = { history = [ parseRoute location ] }
-
-first : List (Maybe Route) -> Maybe Route
-first history =
-  case history of
-    route::_ -> route
-    [] -> Nothing
-
--- Update
-update : Msg -> Model -> (Model, Cmd Msg)
-update msg model =
-  case msg of
-    UrlChange location ->
-      ({ model | history = parseRoute location :: model.history }, Cmd.none)
 
 -- View
 view : Model -> Html Msg
 view model =
   case (first model.history) of
-    Just IndexTopic -> TopicList.view
+    Just IndexTopic -> TopicList.view model
     Just (ShowTopic id) -> TopicDetail.view
     Nothing -> NotFound.view
 
--- Initializer
 init : Navigation.Location -> (Model, Cmd Msg)
-init location = (initialModel location, Cmd.none)
+init location = (initialModel location, getTopics)
 
 main = Navigation.program UrlChange
   { init = init
