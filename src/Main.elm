@@ -19,7 +19,13 @@ view model =
     Nothing -> NotFound.view
 
 init : Navigation.Location -> (Model, Cmd Msg)
-init location = (initialModel location, getTopics)
+init location =
+  (initialModel location
+  , Cmd.batch
+    [ getTopics
+    , urlChangeCmd <| parseRoute location
+    ]
+  )
 
 main = Navigation.program UrlChange
   { init = init
